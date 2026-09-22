@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#07090d" />
-  <title>JARVIS // Neural Command</title>
+  <meta name="theme-color" content="#06080d" />
+  <title>JARVIS // AI Assistant System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -12,13 +12,11 @@
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar">
-      <a class="brand" href="#dashboard" aria-label="Jarvis Dashboard">
-        <span class="brand-mark">J</span><span>JARVIS</span><small>NEURAL COMMAND</small>
-      </a>
+    <header class="topbar glass">
+      <a class="brand" href="#dashboard"><span class="brand-mark">J</span><span>JARVIS</span><small>AI ASSISTANT SYSTEM</small></a>
       <nav class="nav-links" aria-label="Hauptnavigation">
-        <a class="nav-link active" href="#dashboard">Übersicht</a>
-        <a class="nav-link brain-link" href="#brain"><span class="brain-icon">♧</span> Hirn</a>
+        <a class="nav-link active" data-view="dashboard" href="#dashboard">Übersicht</a>
+        <a class="nav-link brain-link" data-view="brain" href="#brain"><span class="brain-icon">🧠</span> Hirn</a>
       </nav>
       <div class="status"><i></i><span>SYSTEM ONLINE</span><b id="clock">00:00:00</b></div>
     </header>
@@ -28,49 +26,27 @@
         <p class="eyebrow">// PERSONAL AI OPERATING SYSTEM</p>
         <h1>Good evening,<br><em>Commander.</em></h1>
         <p class="hero-subtitle">Alle Systeme arbeiten innerhalb der nominalen Parameter. Was ist heute Ihre Priorität?</p>
-        <div class="quick-actions">
-          <button class="gold-button" id="speakButton"><span class="play">▶</span> JARVIS AKTIVIEREN</button>
-          <button class="ghost-button" id="pulseButton">SYSTEM-PULS <span>↗</span></button>
-        </div>
+        <div class="quick-actions"><button class="gold-button" id="speakButton"><span class="play">▶</span> JARVIS AKTIVIEREN</button><button class="ghost-button" id="settingsButton">⚙ EINSTELLUNGEN</button></div>
       </section>
 
       <section class="robot-stage" aria-label="Animierter Jarvis Roboterkopf">
-        <div class="stage-grid"></div><div class="orbital orbital-one"></div><div class="orbital orbital-two"></div>
-        <div class="robot-glow"></div>
-        <div class="robot-head">
-          <div class="antenna"></div><div class="head-shell">
-            <div class="side-panel left"></div><div class="side-panel right"></div>
-            <div class="forehead-line"></div>
-            <div class="eye left-eye"><span></span></div><div class="eye right-eye"><span></span></div>
-            <div class="nose-line"></div>
-            <div class="jaw"><div class="mouth"><span></span><span></span><span></span><span></span><span></span></div></div>
-          </div>
-        </div>
-        <div class="audio-readout"><span class="audio-dot"></span><span id="audioState">AUDIO CHANNEL STANDBY</span><div class="waveform" id="waveform"></div></div>
+        <div class="stage-grid"></div><div class="orbital orbital-one"></div><div class="orbital orbital-two"></div><div class="robot-glow"></div>
+        <div class="robot-head"><div class="antenna"></div><div class="head-shell"><div class="side-panel left"></div><div class="side-panel right"></div><div class="forehead-line"></div><div class="eye left-eye"><span></span></div><div class="eye right-eye"><span></span></div><div class="nose-line"></div><div class="jaw"><div class="mouth" id="mouth"><span></span><span></span><span></span><span></span><span></span></div></div></div></div>
+        <div class="audio-readout"><span class="audio-dot"></span><span id="audioState">CLOUD TTS · STANDBY</span><div class="waveform" id="waveform"></div></div>
       </section>
 
-      <section class="metrics">
-        <article class="metric-card"><span class="metric-label">COGNITIVE LOAD</span><strong>34<span>%</span></strong><div class="bar"><i style="width:34%"></i></div><small>OPTIMAL RANGE</small></article>
-        <article class="metric-card"><span class="metric-label">ACTIVE PROCESSES</span><strong>12</strong><div class="bar"><i style="width:68%"></i></div><small>+3 SINCE MORNING</small></article>
-        <article class="metric-card"><span class="metric-label">NEURAL SYNC</span><strong>99.8<span>%</span></strong><div class="bar"><i style="width:99.8%"></i></div><small>ALL NODES CONNECTED</small></article>
+      <section class="widget-grid" id="widgetGrid" aria-label="Dashboard Widgets">
+        <article class="widget glass" draggable="true" data-widget="system"><header><span class="widget-title"><i class="widget-icon green">⌁</i>SYSTEMSTATUS</span><span class="drag">⠿</span></header><div class="widget-value"><strong>ONLINE</strong><span class="live-dot"></span></div><p>Alle Kerndienste erreichbar</p><div class="mini-bars"><i style="height:45%"></i><i style="height:70%"></i><i style="height:52%"></i><i style="height:88%"></i><i style="height:65%"></i><i style="height:92%"></i><i style="height:76%"></i></div></article>
+        <article class="widget glass" draggable="true" data-widget="resources"><header><span class="widget-title"><i class="widget-icon gold">◌</i>RESSOURCEN</span><span class="drag">⠿</span></header><div class="resource-row"><span>CPU</span><b id="cpu">34%</b><div class="progress"><i id="cpuBar" style="width:34%"></i></div></div><div class="resource-row"><span>RAM</span><b id="ram">62%</b><div class="progress"><i id="ramBar" style="width:62%"></i></div></div><p>Lokaler Node · Echtzeit</p></article>
+        <article class="widget glass" draggable="true" data-widget="api"><header><span class="widget-title"><i class="widget-icon cyan">↯</i>API VERBINDUNG</span><span class="drag">⠿</span></header><div class="connection"><span class="connection-led"></span><strong id="apiStatus">GATEWAY BEREIT</strong></div><p id="endpointLabel">Anthropic Gateway · nicht konfiguriert</p><button class="text-button" id="apiSettings">VERBINDUNG KONFIGURIEREN →</button></article>
+        <article class="widget glass quick-widget" draggable="true" data-widget="quick"><header><span class="widget-title"><i class="widget-icon gold">✦</i>SCHNELLZUGRIFFE</span><span class="drag">⠿</span></header><div class="quick-grid"><button data-quick="status">System prüfen</button><button data-quick="clear">Kontext leeren</button><button data-quick="focus">Fokusmodus</button><button data-quick="brain">Brain View</button></div></article>
       </section>
     </main>
 
-    <main id="brain" class="view brain-view hidden">
-      <section class="brain-heading"><p class="eyebrow">// NEURAL ARCHITECTURE</p><h2>Thought <em>Topology</em></h2><p>Ihre Wissensstruktur, live visualisiert.</p></section>
-      <section class="brain-map" aria-label="Hierarchische Hirnstruktur">
-        <svg class="connections" viewBox="0 0 1200 700" preserveAspectRatio="none" aria-hidden="true">
-          <defs><linearGradient id="lineGold"><stop stop-color="#d9ad55"/><stop offset="1" stop-color="#55401f"/></linearGradient></defs>
-          <path d="M600 350 C470 270 390 190 245 150 M600 350 C750 260 810 180 970 145 M600 350 C420 380 300 430 170 520 M600 350 C770 390 900 450 1050 520"/><path class="branch" d="M245 150 C175 105 125 105 75 80 M245 150 C220 80 255 55 300 38 M970 145 C1015 90 1060 75 1115 62 M970 145 C985 80 950 48 900 30 M170 520 C120 570 105 610 80 655 M170 520 C240 570 260 610 310 660 M1050 520 C1110 560 1140 600 1175 645 M1050 520 C990 570 970 620 925 665"/>
-        </svg>
-        <div class="data-stream stream-a"></div><div class="data-stream stream-b"></div><div class="data-stream stream-c"></div><div class="data-stream stream-d"></div>
-        <div class="central-node"><div class="central-core"><span>J</span></div><strong>HAUPTZENTRALE</strong><small>CORE INTELLIGENCE</small></div>
-        <button class="node node-a"><span>◈</span> FOKUS</button><button class="node node-b"><span>◉</span> ERINNERUNG</button><button class="node node-c"><span>✧</span> KREATIVITÄT</button><button class="node node-d"><span>⌁</span> ANALYSE</button>
-        <div class="leaf leaf-1">ZIELE</div><div class="leaf leaf-2">KONTEXT</div><div class="leaf leaf-3">IDEEN</div><div class="leaf leaf-4">MUSTER</div><div class="leaf leaf-5">DATEN</div><div class="leaf leaf-6">AKTION</div><div class="leaf leaf-7">LOGIK</div><div class="leaf leaf-8">VISION</div>
-      </section>
-    </main>
-    <footer><span>JARVIS v4.7.1</span><span>ENCRYPTED CONNECTION · <b>LOCAL NODE</b></span><span>© 2026 STARK INDUSTRIES</span></footer>
+    <main id="brain" class="view brain-view hidden"><section class="brain-heading"><p class="eyebrow">// NEURAL ARCHITECTURE</p><h2>Thought <em>Topology</em></h2><p>Ihre Wissensstruktur, live visualisiert.</p></section><section class="brain-map" aria-label="Hierarchische Hirnstruktur"><svg class="connections" viewBox="0 0 1200 700" preserveAspectRatio="none"><defs><linearGradient id="lineGold"><stop stop-color="#f0c66d"/><stop offset="1" stop-color="#4c391d"/></linearGradient></defs><path d="M600 350 C470 270 390 190 245 150 M600 350 C750 260 810 180 970 145 M600 350 C420 380 300 430 170 520 M600 350 C770 390 900 450 1050 520"/><path class="branch" d="M245 150 C175 105 125 105 75 80 M245 150 C220 80 255 55 300 38 M970 145 C1015 90 1060 75 1115 62 M970 145 C985 80 950 48 900 30 M170 520 C120 570 105 610 80 655 M170 520 C240 570 260 610 310 660 M1050 520 C1110 560 1140 600 1175 645 M1050 520 C990 570 970 620 925 665"/></svg><div class="data-stream stream-a"></div><div class="data-stream stream-b"></div><div class="data-stream stream-c"></div><div class="data-stream stream-d"></div><div class="central-node"><div class="central-core"><span>J</span></div><strong>HAUPTZENTRALE</strong><small>CORE INTELLIGENCE</small></div><button class="node node-a"><span>◈</span> FOKUS</button><button class="node node-b"><span>◉</span> ERINNERUNG</button><button class="node node-c"><span>✧</span> KREATIVITÄT</button><button class="node node-d"><span>⌁</span> ANALYSE</button><div class="leaf leaf-1">ZIELE</div><div class="leaf leaf-2">KONTEXT</div><div class="leaf leaf-3">IDEEN</div><div class="leaf leaf-4">MUSTER</div><div class="leaf leaf-5">DATEN</div><div class="leaf leaf-6">AKTION</div><div class="leaf leaf-7">LOGIK</div><div class="leaf leaf-8">VISION</div></section></main>
+
+    <footer><span>JARVIS v5.0</span><span>ENCRYPTED CONNECTION · <b>LOCAL NODE</b></span><span>© 2026 STARK INDUSTRIES</span></footer>
   </div>
-  <script src="app.js"></script>
+  <div class="modal-backdrop hidden" id="settingsModal"><section class="settings-modal glass" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><button class="close-modal" id="closeSettings" aria-label="Schließen">×</button><p class="eyebrow">// SYSTEM CONFIGURATION</p><h2 id="settingsTitle">Einstellungen</h2><p class="modal-intro">Verbinde Jarvis mit deinem Cloud-Gateway und konfiguriere die Sprachausgabe.</p><form id="settingsForm"><fieldset><legend>API-EINSTELLUNGEN · CLAUDE CODE / FREELLMAPI</legend><label for="baseUrl">ANTHROPIC_BASE_URL</label><input id="baseUrl" type="url" placeholder="https://api.example.com" autocomplete="off"><small>FreeLLMAPI- oder Gateway-Endpunkt URL</small><label for="authToken">ANTHROPIC_AUTH_TOKEN</label><input id="authToken" type="password" placeholder="sk-ant-••••••••" autocomplete="off"><small>Wird nur lokal in diesem Browser gespeichert.</small></fieldset><fieldset><legend>SPRACHEINSTELLUNGEN · CLOUD TTS</legend><label for="voiceSelect">SYSTEM-SPRACHAUSGABE</label><select id="voiceSelect"><option value="de-CH">Schweizerdeutsch (de-CH)</option><option value="de-DE" selected>Hochdeutsch (de-DE)</option><option value="en-US">Englisch (en-US)</option></select></fieldset><div class="form-actions"><span id="saveNotice"></span><button class="ghost-button" type="button" id="cancelSettings">Abbrechen</button><button class="gold-button" type="submit">EINSTELLUNGEN SPEICHERN</button></div></form></section></div><script src="app.js"></script>
 </body>
 </html>

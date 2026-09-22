@@ -1,25 +1,15 @@
-const clock = document.querySelector('#clock');
-const speakButton = document.querySelector('#speakButton');
-const audioState = document.querySelector('#audioState');
-const mouthBars = [...document.querySelectorAll('.mouth span')];
-const waveform = document.querySelector('#waveform');
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const clock=$('#clock'),speakButton=$('#speakButton'),audioState=$('#audioState'),mouthBars=$$('#mouth span'),waveform=$('#waveform');
 for(let i=0;i<12;i++){const bar=document.createElement('i');bar.style.animationDelay=`${i*.07}s`;waveform.appendChild(bar)}
-setInterval(()=>clock.textContent=new Date().toLocaleTimeString('de-DE',{hour12:false}),1000);
-clock.textContent=new Date().toLocaleTimeString('de-DE',{hour12:false});
-
-let speaking=false, raf;
-function animateMouth(){
-  if(!speaking)return;
-  mouthBars.forEach((bar,i)=>bar.style.height=`${2+Math.random()*13*(i===2?1.25:1)}px`);
-  raf=requestAnimationFrame(()=>setTimeout(animateMouth,45));
-}
-function stopSpeaking(){speaking=false;cancelAnimationFrame(raf);mouthBars.forEach(bar=>bar.style.height='2px');audioState.textContent='AUDIO CHANNEL STANDBY';speakButton.innerHTML='<span class="play">▶</span> JARVIS AKTIVIEREN';}
-speakButton.addEventListener('click',()=>{
-  if(speaking){speechSynthesis.cancel();stopSpeaking();return}
-  const text='Guten Abend, Commander. Alle Systeme arbeiten innerhalb der nominalen Parameter.';
-  speaking=true;audioState.textContent='AUDIO CHANNEL ACTIVE';speakButton.innerHTML='<span class="play">■</span> AUDIO STOPPEN';animateMouth();
-  if('speechSynthesis' in window){const utterance=new SpeechSynthesisUtterance(text);utterance.lang='de-DE';utterance.rate=.92;utterance.onend=stopSpeaking;speechSynthesis.speak(utterance)}else setTimeout(stopSpeaking,4000);
-});
-window.addEventListener('hashchange',updateView);
-function updateView(){const brain=location.hash==='#brain';document.querySelector('.dashboard-view').classList.toggle('hidden',brain);document.querySelector('.brain-view').classList.toggle('hidden',!brain);document.querySelectorAll('.nav-link').forEach(link=>link.classList.toggle('active',link.getAttribute('href')===(brain?'#brain':'#dashboard')))}
-updateView();
+setInterval(()=>clock.textContent=new Date().toLocaleTimeString('de-DE',{hour12:false}),1000);clock.textContent=new Date().toLocaleTimeString('de-DE',{hour12:false});
+let speaking=false,raf;
+function animateMouth(){if(!speaking)return;mouthBars.forEach((bar,i)=>bar.style.height=`${2+Math.random()*13*(i===2?1.25:1)}px`);raf=requestAnimationFrame(()=>setTimeout(animateMouth,45))}
+function stopSpeaking(){speaking=false;cancelAnimationFrame(raf);mouthBars.forEach(bar=>bar.style.height='2px');audioState.textContent='CLOUD TTS · STANDBY';speakButton.innerHTML='<span class="play">▶</span> JARVIS AKTIVIEREN'}
+speakButton.onclick=()=>{if(speaking){speechSynthesis?.cancel();stopSpeaking();return}const locale=$('#voiceSelect').value;const text=locale==='en-US'?'Good evening, Commander. All systems are operating within nominal parameters.':'Guten Abend, Commander. Alle Systeme arbeiten innerhalb der nominalen Parameter.';speaking=true;audioState.textContent='CLOUD TTS · ACTIVE';speakButton.innerHTML='<span class="play">■</span> AUDIO STOPPEN';animateMouth();if('speechSynthesis'in window){const u=new SpeechSynthesisUtterance(text);u.lang=locale;u.rate=.92;u.onend=stopSpeaking;speechSynthesis.speak(u)}else setTimeout(stopSpeaking,4000)};
+function updateView(){const brain=location.hash==='#brain';$('.dashboard-view').classList.toggle('hidden',brain);$('.brain-view').classList.toggle('hidden',!brain);$$('.nav-link').forEach(l=>l.classList.toggle('active',l.dataset.view===(brain?'brain':'dashboard')))}window.addEventListener('hashchange',updateView);updateView();
+const modal=$('#settingsModal');function openSettings(){modal.classList.remove('hidden')}function closeSettings(){modal.classList.add('hidden')};$('#settingsButton').onclick=openSettings;$('#apiSettings').onclick=openSettings;$('#closeSettings').onclick=closeSettings;$('#cancelSettings').onclick=closeSettings;modal.onclick=e=>{if(e.target===modal)closeSettings()};
+const stored=JSON.parse(localStorage.getItem('jarvisSettings')||'{}');if(stored.baseUrl)$('#baseUrl').value=stored.baseUrl;if(stored.voice)$('#voiceSelect').value=stored.voice;if(stored.baseUrl)$('#endpointLabel').textContent=stored.baseUrl;
+$('#settingsForm').onsubmit=e=>{e.preventDefault();const settings={baseUrl:$('#baseUrl').value,token:$('#authToken').value,voice:$('#voiceSelect').value};localStorage.setItem('jarvisSettings',JSON.stringify(settings));$('#endpointLabel').textContent=settings.baseUrl||'Anthropic Gateway · nicht konfiguriert';$('#apiStatus').textContent=settings.baseUrl?'GATEWAY KONFIGURIERT':'GATEWAY BEREIT';$('#saveNotice').textContent='Gespeichert';setTimeout(()=>{closeSettings();$('#saveNotice').textContent=''},900)};
+setInterval(()=>{const cpu=Math.round(27+Math.random()*24),ram=Math.round(55+Math.random()*14);$('#cpu').textContent=cpu+'%';$('#ram').textContent=ram+'%';$('#cpuBar').style.width=cpu+'%';$('#ramBar').style.width=ram+'%'},2200);
+$$('[data-quick]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.quick==='brain')location.hash='brain';if(btn.dataset.quick==='status')alert('JARVIS: Alle Systeme online.');if(btn.dataset.quick==='clear')alert('JARVIS: Lokaler Kontext wurde geleert.');if(btn.dataset.quick==='focus')btn.textContent='Fokus aktiv ✓'});
+let dragged;$$('.widget').forEach(w=>{w.ondragstart=()=>{dragged=w;w.classList.add('dragging')};w.ondragend=()=>w.classList.remove('dragging');w.ondragover=e=>e.preventDefault();w.ondrop=e=>{e.preventDefault();if(dragged&&dragged!==w){const grid=$('#widgetGrid'),items=[...grid.children],a=items.indexOf(dragged),b=items.indexOf(w);grid.insertBefore(dragged,a<b?w:w.nextSibling)}}});
